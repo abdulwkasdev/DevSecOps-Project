@@ -23,6 +23,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          build-args: |
+            VITE_APP_TMDB_V3_API_KEY=${{ secrets.API_KEY }}
 #          push: true
           tags: wahabkas/netflix:${{ github.sha }}
 
