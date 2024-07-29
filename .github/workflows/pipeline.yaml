@@ -30,12 +30,6 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with: 
             image-ref: 'wahabkas/netflix:${{ github.sha }}'
-            format: 'sarif'
-            output: 'trivy-results.sarif'
+            format: 'table'
             severity: 'CRITICAL,HIGH'
             exit-code: '1'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-            sarif_file: 'trivy-results.sarif'
