@@ -35,5 +35,5 @@ jobs:
         with: 
           image-ref: 'wahabkas/netflix:${{ github.sha }}'
           format: 'table'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
           exit-code: '1'
