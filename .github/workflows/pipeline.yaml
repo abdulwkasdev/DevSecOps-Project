@@ -25,13 +25,15 @@ jobs:
           context: .
           build-args: |
             VITE_APP_TMDB_V3_API_KEY=${{ secrets.API_KEY }}
-          push: true
+          push: false
           tags: wahabkas/netflix:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
+          load: true 
 
-#     - name: Trivy Image Scan
-#        uses: aquasecurity/trivy-action@0.20.0
-#        with: 
-##            image-ref: 'wahabkas/netflix:${{ github.sha }}'
-#            format: 'table'
-#           severity: 'CRITICAL,HIGH'
-#            exit-code: '1'
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with: 
+          image-ref: 'wahabkas/netflix:${{ github.sha }}'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
