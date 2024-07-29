@@ -6,19 +6,36 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
-          tags: wahabkas/netflix:latest
+#          push: true
+          tags: wahabkas/netflix:${{ github.sha }}
 
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with: 
+            image-ref: 'wahabkas/netflix:${{ github.sha }}'
+            format: 'sarif'
+            output: 'trivy-results.sarif'
+            severity: 'CRITICAL,HIGH'
+            exit-code: '1'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+            sarif_file: 'trivy-results.sarif'
